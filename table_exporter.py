@@ -1,6 +1,7 @@
 import csv
 
 import mysql.connector
+import logging
 
 from conf_parser import DB_CONN, TABLE_CONF
 
@@ -16,8 +17,13 @@ config = {
 table_name = TABLE_CONF['NAME']
 output_file = "leads_data.csv"
 
+logging.basicConfig(filename='soloserver.log', level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 
 def main():
+    logger.log(logging.INFO, "Init script...")
+
     cnx = mysql.connector.connect(**config)
     cursor = cnx.cursor()
 
@@ -39,7 +45,7 @@ def main():
 
     cnx.close()
 
-    print(f"Data from table '{table_name}' exported to '{output_file}'")
+    logger.log(logging.INFO, f"Data from table '{table_name}' exported to '{output_file}'")
 
 
 if __name__ == "__main__":
